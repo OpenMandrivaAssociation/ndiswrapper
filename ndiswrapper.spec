@@ -1,15 +1,10 @@
-%if %mdkversion < 200600
 %define build_dkms 1
-%else
-%define build_dkms 1
-%endif
 %{?_with_dkms:%define build_dkms 1}
 %{?_without_dkms:%define build_dkms 0}
 
-%define	name	ndiswrapper
-%define	version	1.21
-%define release	%mkrel 2
-%define ndis_version 1.8
+%define name    ndiswrapper
+%define version 1.44
+%define release %mkrel 1
 
 Name: 		%{name}
 Version: 	%{version}
@@ -18,7 +13,7 @@ Summary: 	NdisWrapper binary loader utility
 License: 	GPL
 Group: 		System/Configuration/Hardware
 URL:		http://ndiswrapper.sourceforge.net/
-Source0:	http://prdownloads.sourceforge.net/ndiswrapper/%{name}-%{version}.tar.bz2
+Source0:	http://prdownloads.sourceforge.net/ndiswrapper/%{name}-%{version}.tar.gz
 Source1:	%{name}.bash-completion
 Source2:	%{name}.pm-utils
 Requires: 	kernel
@@ -38,8 +33,7 @@ these unsupported cards working.
 Summary:	DKMS-ready kernel-source for the ndiswrapper kernel module
 License:	GPL
 Group:		System/Kernel and hardware
-Requires(pre):	dkms
-Requires(post): dkms
+Requires(post,preun): dkms
 Requires:	%{name} = %{version}
 
 %description -n dkms-%{name}
@@ -51,12 +45,7 @@ DKMS package for %{name} kernel module.
 
 %build
 pushd utils
-CFLAGS="$RPM_OPT_FLAGS -DNDISWRAPPER_VERSION=\\\"%{ndis_version}\\\" -DUTILS_VERSION=\\\"%{ndis_version}\\\""
-%ifarch ppc
-%make CFLAGS="$CFLAGS" loadndisdriver
-%else
-%make CFLAGS="$CFLAGS"
-%endif 
+%make
 popd
 
 %install
@@ -69,12 +58,9 @@ install -m755 utils/ndiswrapper-buginfo -D $RPM_BUILD_ROOT%{_sbindir}/ndiswrappe
 install -d $RPM_BUILD_ROOT%{_mandir}/man8
 install -m0644 ndiswrapper.8 $RPM_BUILD_ROOT%{_mandir}/man8/
 
-
 %if %build_dkms
 mkdir -p %{buildroot}/usr/src/%{name}-%{version}-%{release}
 cp -a driver/* %{buildroot}/usr/src/%{name}-%{version}-%{release}
-install version %{buildroot}/usr/src/%{name}-%{version}-%{release}
-perl -pi -e 's/^(.include\s+).*(version)/${1} ${2}/g' %{buildroot}/usr/src/%{name}-%{version}-%{release}/Makefile
 cat > %{buildroot}/usr/src/%{name}-%{version}-%{release}/dkms.conf <<EOF
 
 PACKAGE_VERSION="%{version}-%{release}"
@@ -90,40 +76,6 @@ MODULES_CONF_ALIAS_TYPE[0]="eth"
 
 REMAKE_INITRD="no"
 AUTOINSTALL=yes
-
-#PATCH[0]="ipw2100-2.4.25-patch"
-#PATCH_MATCH[0]="2\.4\.25"
-#PATCH[1]="ipw2100-2.6.5-patch"
-#PATCH_MATCH[1]="2\.6\.5"
-EOF
-%endif
-
-
-%if %build_dkms
-mkdir -p %{buildroot}/usr/src/%{name}-%{version}-%{release}
-cp -a driver/* %{buildroot}/usr/src/%{name}-%{version}-%{release}
-install version %{buildroot}/usr/src/%{name}-%{version}-%{release}
-perl -pi -e 's/^(.include\s+).*(version)/${1} ${2}/g' %{buildroot}/usr/src/%{name}-%{version}-%{release}/Makefile
-cat > %{buildroot}/usr/src/%{name}-%{version}-%{release}/dkms.conf <<EOF
-
-PACKAGE_VERSION="%{version}-%{release}"
-
-# Items below here should not have to change with each driver version
-PACKAGE_NAME="%{name}"
-MAKE[0]="make KVERS=\${kernelver} -C \${dkms_tree}/\${PACKAGE_NAME}/\${PACKAGE_VERSION}/build"
-CLEAN="make -C \${kernel_source_dir} SUBDIRS=\${dkms_tree}/\${PACKAGE_NAME}/\${PACKAGE_VERSION}/build clean"
-
-BUILT_MODULE_NAME[0]="\$PACKAGE_NAME"
-DEST_MODULE_LOCATION[0]="/kernel/3rdparty/%{name}"
-MODULES_CONF_ALIAS_TYPE[0]="eth"
-
-REMAKE_INITRD="no"
-AUTOINSTALL=yes
-
-#PATCH[0]="ipw2100-2.4.25-patch"
-#PATCH_MATCH[0]="2\.4\.25"
-#PATCH[1]="ipw2100-2.6.5-patch"
-#PATCH_MATCH[1]="2\.6\.5"
 EOF
 %endif
 
@@ -135,21 +87,18 @@ install -D -m 755 %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/pm-utils/sleep.d/11_ndis
 rm -rf $RPM_BUILD_ROOT
 
 %post 
-echo -e "please download binary driver at http://ndiswrapper.sourceforge.net/wiki/index.php/List\nuse ndiswrapper -i <inffile.inf> as root to install driver"
+echo -e "please download binary driver (look at http://ndiswrapper.sourceforge.net/)\nuse ndiswrapper -i <inffile.inf> as root to install driver"
 
 %if %build_dkms
 %post -n dkms-%{name}
-if [ $1 == 1 ]
-  then dkms add -m %{name} -v %{version}-%{release} --rpm_safe_upgrade
-  dkms build -m %{name} -v %{version}-%{release} --rpm_safe_upgrade
-  dkms install -m %{name} -v %{version}-%{release} --rpm_safe_upgrade
-
-fi
+dkms add -m %{name} -v %{version}-%{release} --rpm_safe_upgrade
+dkms build -m %{name} -v %{version}-%{release} --rpm_safe_upgrade
+dkms install -m %{name} -v %{version}-%{release} --rpm_safe_upgrade --force
+exit 0
 
 %preun -n dkms-%{name}
-#if [ $1 == 0 ]
-#  then dkms remove -m %{name} -v %{version} --rpm_safe_upgrade --all ||:
-#fi
+dkms remove -m %{name} -v %{version}-%{release} --rpm_safe_upgrade --all
+exit 0
 %endif
 
 %files
@@ -168,5 +117,4 @@ fi
 %defattr(-,root,root)
 /usr/src/%{name}-%{version}-%{release}
 %endif
-
 
