@@ -3,8 +3,8 @@
 %{?_without_dkms:%define build_dkms 0}
 
 %define name    ndiswrapper
-%define version 1.49
-%define release %mkrel 2
+%define version 1.50
+%define release %mkrel 1
 
 Name: 		%{name}
 Version: 	%{version}
