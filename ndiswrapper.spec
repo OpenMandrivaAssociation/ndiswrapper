@@ -18,6 +18,7 @@ Source1:	%{name}.bash-completion
 Source2:	%{name}.pm-utils
 Patch:  	ndiswrapper-1.44-cflags.patch
 Requires: 	kernel
+BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Some vendors refuses to release specs or even a binary 
