@@ -4,7 +4,7 @@
 
 %define name    ndiswrapper
 %define version 1.52
-%define release %mkrel 1
+%define release %mkrel 2
 
 Name: 		%{name}
 Version: 	%{version}
@@ -31,13 +31,19 @@ these unsupported cards working.
 
 %if %build_dkms
 %package -n dkms-%{name}
-Summary:	DKMS-ready kernel-source for the ndiswrapper kernel module
+Summary:	DKMS ndiswrapper module: USUALLY NOT NEEDED
 License:	GPL
 Group:		System/Kernel and hardware
 Requires(post,preun): dkms
 Requires:	%{name} = %{version}
 
 %description -n dkms-%{name}
+** YOU ALMOST CERTAINLY SHOULD NOT INSTALL THIS PACKAGE **. It is only
+useful if you are using a kernel with no ndiswrapper module of its own.
+All official Mandriva kernel packages, and all kernel-tmb packages,
+have their own ndiswrapper modules. If you are using one of these
+kernels, DO NOT install this package.
+
 DKMS package for %{name} kernel module.
 %endif
 
