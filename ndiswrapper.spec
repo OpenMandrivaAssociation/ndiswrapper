@@ -21,13 +21,18 @@ Requires: 	kernel
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
-Some vendors refuses to release specs or even a binary 
-linux-driver for their WLAN cards. This project tries 
-to solve this problem by making a kernel module that 
-can load Ndis (windows network driver API) drivers. 
-We're not trying to implement all of the Ndis API 
-but rather implement the functions needed to get 
-these unsupported cards working.
+Ndiswrapper implements the Windows kernel APIs within the Linux kernel.  This
+allows you to use a Windows driver for a wireless network card. The driver
+runs natively, as though it is in Windows, without binary emulation.  This is
+not ideal, but is useful when a vendor does not provide Linux drivers and no
+free and open driver exists.
+
+With ndiswrapper, most miniPCI (builtin), PCI, PCMCIA (Cardbus only) or USB
+wireless network adapteers work in Linux. Although ndiswrapper is intended for
+wireless network cards, other devices are known to work, such as ethernet
+cards, USB to serial port device, and home phone network devices.
+
+Note that ndiswrapper is known to cause occational computer lockups.
 
 %if %build_dkms
 %package -n dkms-%{name}
