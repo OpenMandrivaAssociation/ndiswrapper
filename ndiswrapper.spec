@@ -4,7 +4,7 @@
 
 %define name    ndiswrapper
 %define version 1.53
-%define release %mkrel 1
+%define release %mkrel 2
 
 Name: 		%{name}
 Version: 	%{version}
@@ -95,7 +95,7 @@ EOF
 
 install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d/ndiswrapper
-install -D -m 755 %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/pm-utils/sleep.d/11_ndiswrapper
+install -D -m 755 %{SOURCE2} $RPM_BUILD_ROOT%{_libdir}/pm-utils/sleep.d/11_ndiswrapper
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -123,7 +123,7 @@ exit 0
 %{_sbindir}/ndiswrapper-buginfo
 %{_sysconfdir}/%{name}
 %config(noreplace)%{_sysconfdir}/bash_completion.d/%{name}
-%{_datadir}/pm-utils/sleep.d/11_ndiswrapper
+%{_libdir}/pm-utils/sleep.d/11_ndiswrapper
 %{_mandir}/man8/*
 
 %if %build_dkms
