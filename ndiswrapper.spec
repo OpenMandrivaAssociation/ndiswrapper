@@ -4,7 +4,7 @@
 
 %define name    ndiswrapper
 %define version 1.56
-%define release %mkrel 1
+%define release %mkrel 2
 
 Name: 		%{name}
 Version: 	%{version}
@@ -16,7 +16,8 @@ URL:		http://ndiswrapper.sourceforge.net/
 Source0:	http://prdownloads.sourceforge.net/ndiswrapper/%{name}-%{version}.tar.gz
 Source1:	%{name}.bash-completion
 Source2:	%{name}.pm-utils
-Patch:  	ndiswrapper-1.44-cflags.patch
+Patch0:  	ndiswrapper-1.44-cflags.patch
+Patch1:		ndiswrapper-2.6.35-buildfix.patch
 Requires: 	kernel
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
@@ -54,7 +55,8 @@ DKMS package for %{name} kernel module.
 
 %prep
 %setup -q
-%patch -p1 -b .cflags
+%patch0 -p1 -b .cflags
+%patch1 -p1 -b .buildfix
 
 %build
 pushd utils
