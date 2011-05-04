@@ -4,7 +4,7 @@
 
 %define name    ndiswrapper
 %define version 1.56
-%define release %mkrel 3
+%define release %mkrel 4
 
 Name: 		%{name}
 Version: 	%{version}
