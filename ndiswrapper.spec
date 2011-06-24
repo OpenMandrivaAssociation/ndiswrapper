@@ -19,6 +19,7 @@ Source2:	%{name}.pm-utils
 Patch0:  	ndiswrapper-1.44-cflags.patch
 Patch1:		ndiswrapper-2.6.35-buildfix.patch
 Patch2:		ndiswrapper-2.6.36-buildfix.patch
+Patch3:		ndiswrapper-2.6.38-buildfix.patch
 Requires: 	kernel
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
@@ -59,6 +60,7 @@ DKMS package for %{name} kernel module.
 %patch0 -p1 -b .cflags
 %patch1 -p1 -b .buildfix-35
 %patch2 -p1 -b .buildfix-36
+%patch3 -p1 -b .buildfix-38
 
 %build
 pushd utils
