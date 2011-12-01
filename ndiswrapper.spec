@@ -72,14 +72,14 @@ CFLAGS="$RPM_OPT_FLAGS" \
 popd
 
 %install
-rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
-install -m755 utils/loadndisdriver -D $RPM_BUILD_ROOT/sbin/loadndisdriver
-install -m755 utils/ndiswrapper -D $RPM_BUILD_ROOT%{_sbindir}/ndiswrapper
-install -m755 utils/ndiswrapper-buginfo -D $RPM_BUILD_ROOT%{_sbindir}/ndiswrapper-buginfo
+rm -rf %{buildroot}
+install -d %{buildroot}%{_sysconfdir}/%{name}
+install -m755 utils/loadndisdriver -D %{buildroot}/sbin/loadndisdriver
+install -m755 utils/ndiswrapper -D %{buildroot}%{_sbindir}/ndiswrapper
+install -m755 utils/ndiswrapper-buginfo -D %{buildroot}%{_sbindir}/ndiswrapper-buginfo
 
-install -d $RPM_BUILD_ROOT%{_mandir}/man8
-install -m0644 ndiswrapper.8 $RPM_BUILD_ROOT%{_mandir}/man8/
+install -d %{buildroot}%{_mandir}/man8
+install -m0644 ndiswrapper.8 %{buildroot}%{_mandir}/man8/
 
 %if %build_dkms
 mkdir -p %{buildroot}/usr/src/%{name}-%{version}-%{release}
@@ -102,12 +102,12 @@ AUTOINSTALL=yes
 EOF
 %endif
 
-install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d
-install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d/ndiswrapper
-install -D -m 755 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/pm/config.d/%{name}
+install -d -m 755 %{buildroot}%{_sysconfdir}/bash_completion.d
+install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/bash_completion.d/ndiswrapper
+install -D -m 755 %{SOURCE2} %{buildroot}%{_sysconfdir}/pm/config.d/%{name}
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %post 
 echo -e "please download binary driver (look at http://ndiswrapper.sourceforge.net/)\nuse ndiswrapper -i <inffile.inf> as root to install driver"
