@@ -3,8 +3,8 @@
 %{?_without_dkms:%define build_dkms 0}
 
 %define name    ndiswrapper
-%define version 1.56
-%define release %mkrel 6
+%define version 1.57
+%define release %mkrel 1
 
 Name: 		%{name}
 Version: 	%{version}
@@ -17,9 +17,6 @@ Source0:	http://prdownloads.sourceforge.net/ndiswrapper/%{name}-%{version}.tar.g
 Source1:	%{name}.bash-completion
 Source2:	%{name}.pm-utils
 Patch0:  	ndiswrapper-1.44-cflags.patch
-Patch1:		ndiswrapper-2.6.35-buildfix.patch
-Patch2:		ndiswrapper-2.6.36-buildfix.patch
-Patch3:		ndiswrapper-2.6.38-buildfix.patch
 Requires: 	kernel
 %if %{mdkversion} >= 201100
 BuildRequires:	rpm-build >= 1:5.3.12
@@ -61,9 +58,6 @@ DKMS package for %{name} kernel module.
 %prep
 %setup -q
 %patch0 -p1 -b .cflags
-%patch1 -p1 -b .buildfix-35
-%patch2 -p1 -b .buildfix-36
-%patch3 -p1 -b .buildfix-38
 
 %build
 pushd utils
