@@ -1,0 +1,4 @@
+sources:
+  "ndiswrapper-1.57.tar.gz:"	faa896fd16e43fb93f4e10d9e9f76027c7e6d402
+  "ndiswrapper.bash-completion:"	8cc576081f416d85d852a33a864cf10aeaa0c39b
+  "ndiswrapper.pm-utils:"	daa940b84c66d2e93310ad4167c70135f8ab9822

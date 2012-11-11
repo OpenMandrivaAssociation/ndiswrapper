@@ -1,0 +1,11 @@
+--- ndiswrapper-1.44/utils/Makefile.orig	2007-06-01 15:55:28.000000000 -0300
++++ ndiswrapper-1.44/utils/Makefile	2007-06-01 16:00:15.000000000 -0300
+@@ -5,7 +5,7 @@
+ DRIVER_DIR ?= ../driver
+ 
+ CC = gcc
+-CFLAGS = -g -Wall -I$(DRIVER_DIR)
++CFLAGS += -g -Wall -I$(DRIVER_DIR)
+ 
+ DISTFILES=Makefile ndiswrapper loadndisdriver.c ndiswrapper-buginfo
+ 
