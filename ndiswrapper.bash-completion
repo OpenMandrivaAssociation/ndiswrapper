@@ -1,0 +1,48 @@
+# bash completion for id
+# $Id: ndiswrapper,v 1.1 2005/05/08 13:44:14 guillaume Exp $
+
+_ndiswrapper_drivers()
+{
+	COMPREPLY=( $( ndiswrapper -l | awk '/driver present/ {print $1}' |grep "^$cur" ) )
+}
+
+_ndiswrapper()
+{
+	local cur prev pprev
+
+	COMPREPLY=()
+	cur=${COMP_WORDS[COMP_CWORD]}
+	prev=${COMP_WORDS[COMP_CWORD-1]}
+
+	if [ $COMP_CWORD -gt 1 ]; then 
+		pprev=${COMP_WORDS[COMP_CWORD-2]}
+		case $pprev in
+			-d)
+				_ndiswrapper_drivers
+				return 0
+				;;
+		esac
+	fi
+
+        case $prev in
+                -i)
+			_filedir
+                        return 0
+                        ;;
+                -d)
+			_pci_ids
+			_usb_ids
+                        return 0
+			;;
+                -e)
+			_ndiswrapper_drivers
+                        return 0
+			;;
+	esac
+
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-i -d -e -l -m -hotplug' -- $cur ) )
+	fi
+}
+complete -F _ndiswrapper ndiswrapper
