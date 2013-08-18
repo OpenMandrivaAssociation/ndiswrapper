@@ -7,8 +7,8 @@
 %define release 8
 
 Summary:	NdisWrapper binary loader utility
-Name:		pkgconfig(gtk-sharp-2.0)
 Version:	1.56
+Name:		%{name}
 Release:	8
 License:	GPLv2
 Group:		System/Configuration/Hardware
@@ -21,9 +21,7 @@ Patch1:		ndiswrapper-2.6.35-buildfix.patch
 Patch2:		ndiswrapper-2.6.36-buildfix.patch
 Patch3:		ndiswrapper-2.6.38-buildfix.patch
 Requires:	kernel
-%if %{mdkversion} >= 201100
 BuildRequires:	rpm-build >= 1:5.3.12
-%endif
 
 %description
 Ndiswrapper implements the Windows kernel APIs within the Linux kernel.  This
