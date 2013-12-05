@@ -1,0 +1,11 @@
+--- ndiswrapper-1.59/utils/Makefile.orig	2013-11-30 21:11:03.320414959 +0200
++++ ndiswrapper-1.59/utils/Makefile	2013-11-30 21:13:32.269422293 +0200
+@@ -6,7 +6,7 @@ HEADERS = $(DRIVER_DIR)/loader.h $(DRIVE
+ 
+ CC = gcc
+ HOSTCC = $(CC)
+-CFLAGS = -g -Wall -I$(DRIVER_DIR)
++CFLAGS += -g -Wall -I$(DRIVER_DIR)
+ 
+ DISTFILES=Makefile ndiswrapper loadndisdriver.c ndiswrapper-buginfo
+ 

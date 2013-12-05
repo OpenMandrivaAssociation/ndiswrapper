@@ -1,27 +1,17 @@
-%define build_dkms 1
-%{?_with_dkms:%define build_dkms 1}
-%{?_without_dkms:%define build_dkms 0}
+%bcond_without	dkms
 
-%define name    ndiswrapper
-%define version 1.56
-%define release 8
-
-Summary:	NdisWrapper binary loader utility
-Version:	1.56
-Name:		%{name}
-Release:	8
-License:	GPLv2
-Group:		System/Configuration/Hardware
-Url:		http://ndiswrapper.sourceforge.net/
+Name: 		ndiswrapper
+Version: 	1.59
+Release: 	1
+Summary: 	NdisWrapper binary loader utility
+License: 	GPL
+Group: 		System/Kernel and hardware
+URL:		http://ndiswrapper.sourceforge.net/
 Source0:	http://prdownloads.sourceforge.net/ndiswrapper/%{name}-%{version}.tar.gz
 Source1:	%{name}.bash-completion
 Source2:	%{name}.pm-utils
-Patch0:		ndiswrapper-1.44-cflags.patch
-Patch1:		ndiswrapper-2.6.35-buildfix.patch
-Patch2:		ndiswrapper-2.6.36-buildfix.patch
-Patch3:		ndiswrapper-2.6.38-buildfix.patch
-Requires:	kernel
-BuildRequires:	rpm-build >= 1:5.3.12
+Patch0:  	ndiswrapper-1.59-cflags.patch
+Requires: 	kernel
 
 %description
 Ndiswrapper implements the Windows kernel APIs within the Linux kernel.  This
@@ -37,18 +27,19 @@ cards, USB to serial port device, and home phone network devices.
 
 Note that ndiswrapper is known to cause occational computer lockups.
 
-%if %build_dkms
+%if %{with dkms}
 %package -n dkms-%{name}
-Summary:	DKMS ndiswrapper module:	USUALLY NOT NEEDED
+Summary:	DKMS ndiswrapper module: USUALLY NOT NEEDED
 License:	GPL
+BuildArch:	noarch
 Group:		System/Kernel and hardware
-Requires(post,preun):	dkms
+Requires(post,preun): dkms
 Requires:	%{name} = %{version}
 
 %description -n dkms-%{name}
 ** YOU ALMOST CERTAINLY SHOULD NOT INSTALL THIS PACKAGE **. It is only
 useful if you are using a kernel with no ndiswrapper module of its own.
-All official Mandriva kernel packages, and all kernel-tmb packages,
+All official %{_vendor} kernel packages, and all kernel-tmb packages,
 have their own ndiswrapper modules. If you are using one of these
 kernels, DO NOT install this package.
 
@@ -58,9 +49,6 @@ DKMS package for %{name} kernel module.
 %prep
 %setup -q
 %patch0 -p1 -b .cflags
-%patch1 -p1 -b .buildfix-35
-%patch2 -p1 -b .buildfix-36
-%patch3 -p1 -b .buildfix-38
 
 %build
 pushd utils
@@ -69,15 +57,15 @@ CFLAGS="$RPM_OPT_FLAGS" \
 popd
 
 %install
-install -d %{buildroot}%{_sysconfdir}/%{name}
-install -m755 utils/loadndisdriver -D %{buildroot}/sbin/loadndisdriver
-install -m755 utils/ndiswrapper -D %{buildroot}%{_sbindir}/ndiswrapper
-install -m755 utils/ndiswrapper-buginfo -D %{buildroot}%{_sbindir}/ndiswrapper-buginfo
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
+install -m755 utils/loadndisdriver -D $RPM_BUILD_ROOT/sbin/loadndisdriver
+install -m755 utils/ndiswrapper -D $RPM_BUILD_ROOT%{_sbindir}/ndiswrapper
+install -m755 utils/ndiswrapper-buginfo -D $RPM_BUILD_ROOT%{_sbindir}/ndiswrapper-buginfo
 
-install -d %{buildroot}%{_mandir}/man8
-install -m0644 ndiswrapper.8 %{buildroot}%{_mandir}/man8/
+install -d $RPM_BUILD_ROOT%{_mandir}/man8
+install -m0644 ndiswrapper.8 $RPM_BUILD_ROOT%{_mandir}/man8/
 
-%if %build_dkms
+%if %{with dkms}
 mkdir -p %{buildroot}/usr/src/%{name}-%{version}-%{release}
 cp -a driver/* %{buildroot}/usr/src/%{name}-%{version}-%{release}
 cat > %{buildroot}/usr/src/%{name}-%{version}-%{release}/dkms.conf <<EOF
@@ -98,17 +86,17 @@ AUTOINSTALL=yes
 EOF
 %endif
 
-install -d -m 755 %{buildroot}%{_sysconfdir}/bash_completion.d
-install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/bash_completion.d/ndiswrapper
-install -D -m 755 %{SOURCE2} %{buildroot}%{_sysconfdir}/pm/config.d/%{name}
+install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d
+install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d/ndiswrapper
+install -D -m 755 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/pm/config.d/%{name}
 
 %post 
 echo -e "please download binary driver (look at http://ndiswrapper.sourceforge.net/)\nuse ndiswrapper -i <inffile.inf> as root to install driver"
 
-%if %build_dkms
+%if %{with dkms}
 %post -n dkms-%{name}
-dkms add -m %{name} -v %{version}-%{release} --rpm_safe_upgrade
-dkms build -m %{name} -v %{version}-%{release} --rpm_safe_upgrade
+dkms add -m %{name} -v %{version}-%{release} --rpm_safe_upgrade &&
+dkms build -m %{name} -v %{version}-%{release} --rpm_safe_upgrade &&
 dkms install -m %{name} -v %{version}-%{release} --rpm_safe_upgrade --force
 exit 0
 
@@ -127,8 +115,7 @@ exit 0
 %{_sysconfdir}/pm/config.d/%{name}
 %{_mandir}/man8/*
 
-%if %build_dkms
+%if %{with dkms}
 %files -n dkms-%{name}
 /usr/src/%{name}-%{version}-%{release}
 %endif
-
