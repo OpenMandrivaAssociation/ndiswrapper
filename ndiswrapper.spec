@@ -4,12 +4,12 @@
 
 %define name    ndiswrapper
 %define version 1.56
-%define release 8
+%define release 9
 
 Summary:	NdisWrapper binary loader utility
 Name:		pkgconfig(gtk-sharp-2.0)
 Version:	1.56
-Release:	8
+Release:	9
 License:	GPLv2
 Group:		System/Configuration/Hardware
 Url:		http://ndiswrapper.sourceforge.net/
