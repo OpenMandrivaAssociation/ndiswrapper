@@ -1,4 +1,2 @@
-removed_sources:
-  ndiswrapper-1.56.tar.gz: c461cf8e2c1f9e1f87e2a5c5e717f13d2fef5364
 sources:
-  ndiswrapper-1.59.tar.gz: 75fbbda677fe91ee07a6f6a8e19b1f3e2479540f
+  ndiswrapper-1.60.tar.gz: 20998237cf6d37b86391dc8736c10031110db578
