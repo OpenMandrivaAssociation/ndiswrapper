@@ -2,7 +2,7 @@
 
 Name: 		ndiswrapper
 Version: 	1.60
-Release: 	11
+Release: 	1
 Summary: 	NdisWrapper binary loader utility
 License: 	GPL
 Group: 		System/Kernel and hardware
@@ -51,8 +51,8 @@ DKMS package for %{name} kernel module.
 %patch0 -p1 -b .cflags
 
 %build
+%setup_compile_flags
 pushd utils
-CFLAGS="$RPM_OPT_FLAGS" \
 %make
 popd
 
