@@ -1,8 +1,8 @@
 %bcond_without	dkms
 
 Name: 		ndiswrapper
-Version: 	1.60
-Release: 	3
+Version: 	1.61
+Release: 	1
 Summary: 	NdisWrapper binary loader utility
 License: 	GPL
 Group: 		System/Kernel and hardware
