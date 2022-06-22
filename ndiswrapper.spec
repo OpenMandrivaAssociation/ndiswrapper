@@ -2,7 +2,7 @@
 
 Name: 		ndiswrapper
 Version:	1.63
-Release:	1
+Release:	2
 Summary: 	NdisWrapper binary loader utility
 License: 	GPL
 Group: 		System/Kernel and hardware
