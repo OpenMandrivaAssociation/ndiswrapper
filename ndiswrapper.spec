@@ -6,7 +6,7 @@ Release:	3
 Summary: 	NdisWrapper binary loader utility
 License: 	GPL
 Group: 		System/Kernel and hardware
-URL:		http://ndiswrapper.sourceforge.net/
+URL:		https://ndiswrapper.sourceforge.net/
 Source0:	http://prdownloads.sourceforge.net/ndiswrapper/%{name}-%{version}.tar.gz
 Source1:	%{name}.bash-completion
 Source2:	%{name}.pm-utils
