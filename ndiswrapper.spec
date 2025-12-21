@@ -13,6 +13,7 @@ Source2:	%{name}.pm-utils
 Patch0:  	ndiswrapper-1.59-cflags.patch
 Requires: 	kernel
 
+BuildRequires:	make
 %description
 Ndiswrapper implements the Windows kernel APIs within the Linux kernel.  This
 allows you to use a Windows driver for a wireless network card. The driver
